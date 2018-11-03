@@ -1,8 +1,8 @@
-package main
+package loopia
 
 import (
     "github.com/hashicorp/terraform/helper/schema"
-    "github.com/jonlil/loopia"
+    "github.com/jonlil/loopia-go"
     "fmt"
     "strconv"
     "strings"
