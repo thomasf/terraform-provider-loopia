@@ -54,13 +54,25 @@ func resourceLoopiaRecordCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceLoopiaRecordRead(d *schema.ResourceData, meta interface{}) error {
-	// client := meta.(*loopia.API)
+	client := meta.(*loopia.API)
+
+	id, err := strconv.ParseInt(d.Id(), 10, 0)
+
+	record, err := client.GetZoneRecord(d.Get("domain").(string), d.Get("name").(string), id)
+	if err != nil {
+		if strings.Contains(err.Error(), "ID Not found") {
+			d.SetId("")
+			return nil
+		}
+	  return err
+	}
+
+	d.Set("priority", record.Priority)
+	d.Set("value", record.Value)
+	d.Set("type", record.Type)
+	d.Set("ttl", record.TTL)
+
 	return nil
-	// record, err := client.GetZoneRecord()
-	// if err != nil {
-	//   return nil, fmt.Errorf("Unable to find record with ID %q: %q", d.Id())
-	// }
-	// return nil
 }
 
 func resourceLoopiaRecordUpdate(d *schema.ResourceData, m interface{}) error {

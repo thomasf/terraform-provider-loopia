@@ -23,7 +23,6 @@ func Provider() terraform.ResourceProvider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"loopia_record":    resourceLoopiaRecord(),
-			"loopia_subdomain": resourceLoopiaSubdomain(),
 		},
 
 		ConfigureFunc: providerConfigure,
