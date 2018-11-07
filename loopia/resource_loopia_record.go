@@ -76,6 +76,22 @@ func resourceLoopiaRecordRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceLoopiaRecordUpdate(d *schema.ResourceData, m interface{}) error {
+    client := meta.(*loopia.API)
+    id, err := strconv.ParseInt(d.Id(), 10, 0)
+
+    updateRecord := loopia.Record{
+        ID: id,
+        TTL: d.Get("ttl").(string),
+        Type: d.Get("type").(string),
+        Value: d.Get("value").(string),
+        Priority: d.get("Priority").(int),
+    }
+
+    ok, err := loopia.UpdateZoneRecord(d.Get("domain"), d.Get("name"), updateRecord)
+    if ok.Status != "success" {
+        return err
+    }
+
 	return resourceLoopiaRecordRead(d, m)
 }
 
